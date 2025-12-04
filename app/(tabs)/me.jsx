@@ -1,9 +1,9 @@
 import { View, Text } from "react-native"
 
-export default function CreateAccount () {
+export default function Me () {
     return (
         <View>
-            <Text>Create account</Text>
+            <Text>My profile</Text>
         </View>
     )
 }

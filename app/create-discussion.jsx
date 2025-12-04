@@ -1,9 +1,9 @@
 import { View, Text } from "react-native"
 
-export default function CreateAccount () {
+export default function CreateDiscussion () {
     return (
         <View>
-            <Text>Create account</Text>
+            <Text>Create Discussion</Text>
         </View>
     )
 }

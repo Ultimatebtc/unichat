@@ -1,9 +1,9 @@
 import { View, Text } from "react-native"
 
-export default function CreateAccount () {
+export default function Chats () {
     return (
         <View>
-            <Text>Create account</Text>
+            <Text>Chats</Text>
         </View>
     )
 }
