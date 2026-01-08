@@ -1,9 +1,12 @@
-import { View, Text, KeyboardAvoidingView, Platform, StatusBar, StyleSheet, ScrollView, TextInput, Pressable, TouchableOpacity } from "react-native"
+import { View, Text, KeyboardAvoidingView, Platform, StatusBar, StyleSheet, ScrollView, TextInput, Pressable, ActivityIndicator, Alert} from "react-native"
 import { useFormik } from "formik";
 import * as yup from "yup";
 import RNPickerSelect from "react-native-picker-select";
 import { useState } from "react";
 import { discussionCategories } from "../assets/data/discussion-categories";
+import { db } from "../config/firebase";
+import { addDoc, collection } from "firebase/firestore";
+import { useRouter } from "expo-router";
 
 const validationRules = yup.object().shape({
     subject: yup.string().required().min(3),
@@ -12,10 +15,36 @@ const validationRules = yup.object().shape({
 
 export default function CreateDiscussion() {
     const [selectedCategory, setSelectedCategory] = useState("");
+    const [activity,setActivity] = useState(false);
+
+    const router = useRouter();
 
     const { handleChange, handleBlur, errors, values, touched, handleSubmit } = useFormik({
         initialValues: { subject: "", body: "" },
-        onSubmit: () => { },
+        onSubmit: async () => {
+            setActivity(true);
+
+            try {
+                await addDoc(collection(db,"discussions"),{
+                    title: values.subject,
+                    text: values.body,
+                    category: selectedCategory,
+                    author: "",
+                    timecreated: new Date().getTime(),
+                });
+
+                // show success message
+                Alert.alert(
+                    "Info",
+                    "You have created a discussion",
+                    [{text: "Go to feeds", onPress: () => router.push("/(tabs)/discussions")}]
+                )
+            } catch (e) {
+                Alert.alert("Error",e.message);
+            } finally {
+                setActivity(false)
+            }
+        },
         validationSchema: validationRules
     });
 
@@ -69,7 +98,10 @@ export default function CreateDiscussion() {
                         <Pressable
                             onPress={handleSubmit}
                             style={styles.submit}>
-                            <Text style={{ fontWeight: "bold", color: "oldlace" }}>POST DISCUSSION</Text>
+                                {activity ?
+                                <ActivityIndicator size={24} color="white"/>
+                                :
+                            <Text style={{ fontWeight: "bold", color: "oldlace" }}>POST DISCUSSION</Text>}
                         </Pressable>
                     </View>
                 </View>

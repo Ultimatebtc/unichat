@@ -7,7 +7,7 @@ export default function RootLayout() {
   const [session,setSession] = useState(false);
 
   useEffect(() => {
-    if (currentUser !== undefined) {
+    if (currentUser !== true) {
       setSession(true);
     } else {
       setSession(false);
