@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     wrapper: {
         flex: 1,
         paddingHorizontal: 12
-    },
+    },  
     header: {
         display: "flex",
         flexDirection: "row",
