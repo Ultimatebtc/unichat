@@ -1,12 +1,12 @@
-import { View, Text, KeyboardAvoidingView, Platform, StatusBar, StyleSheet, ScrollView, TextInput, Pressable, ActivityIndicator, Alert} from "react-native"
+import { useRouter } from "expo-router";
+import { addDoc, collection } from "firebase/firestore";
 import { useFormik } from "formik";
-import * as yup from "yup";
-import RNPickerSelect from "react-native-picker-select";
 import { useState } from "react";
+import { ActivityIndicator, Alert, KeyboardAvoidingView, Platform, Pressable, ScrollView, StatusBar, StyleSheet, Text, TextInput, View } from "react-native";
+import RNPickerSelect from "react-native-picker-select";
+import * as yup from "yup";
 import { discussionCategories } from "../assets/data/discussion-categories";
 import { db } from "../config/firebase";
-import { addDoc, collection } from "firebase/firestore";
-import { useRouter } from "expo-router";
 
 const validationRules = yup.object().shape({
     subject: yup.string().required().min(3),
@@ -14,27 +14,27 @@ const validationRules = yup.object().shape({
     image: yup.string().required(),
 });
 
-export default function CreateDiscussion() {
-    const [selectedCategory, setSelectedCategory] = useState("");
+export default function CreateDiscussion () {
+    const [selectedCategory,setSelectedCategory] = useState("");
     const [activity,setActivity] = useState(false);
 
     const router = useRouter();
 
-    const { handleChange, handleBlur, errors, values, touched, handleSubmit } = useFormik({
-        initialValues: { subject: "", body: "", image:"" },
+    const { handleChange,handleBlur,errors,values,touched,handleSubmit } = useFormik({
+        initialValues: { subject:"",body:"",image:"" },
         onSubmit: async () => {
             setActivity(true);
 
             try {
-                await addDoc(collection(db,"discussions"),{
+               await addDoc(collection(db,"discussions"),{
                     title: values.subject,
                     text: values.body,
                     category: selectedCategory,
                     author: "",
                     imgUrl: values.image,
                     timecreated: new Date().getTime(),
-                });
-
+                }); 
+                
                 // show success message
                 Alert.alert(
                     "Info",
@@ -44,7 +44,7 @@ export default function CreateDiscussion() {
             } catch (e) {
                 Alert.alert("Error",e.message);
             } finally {
-                setActivity(false)
+                setActivity(false);
             }
         },
         validationSchema: validationRules
@@ -64,7 +64,7 @@ export default function CreateDiscussion() {
                 showsVerticalScrollIndicator={false}>
                 <View style={styles.body}>
                     {/* <StatusBar translucent={false} barStyle="light-content"/> */}
-
+                    
                     <View style={styles.form}>
                         <View style={styles.inputBlock}>
                             <Text>Choose a category for this discussion</Text>
@@ -72,48 +72,48 @@ export default function CreateDiscussion() {
                                 <RNPickerSelect
                                 items={discussionCategories}
                                 onValueChange={(item) => setSelectedCategory(item)}
-                                value={selectedCategory} />
+                                value={selectedCategory}/>
                             </View>
                         </View>
                         <View style={styles.inputBlock}>
-                            <TextInput
-                                keyboardType="default"
-                                placeholder="discussion subject"
-                                style={styles.input}
-                                value={values.subject}
-                                onChangeText={handleChange("subject")}
-                                onBlur={handleBlur("subject")} />
+                            <TextInput 
+                            keyboardType="default"
+                            placeholder="discussion subject"
+                            style={styles.input}
+                            value={values.subject}
+                            onChangeText={handleChange("subject")}
+                            onBlur={handleBlur("subject")}/>
                             {errors.subject && touched.subject && <Text style={styles.errorText}>{errors.subject}</Text>}
                         </View>
                         <View style={styles.inputBlock}>
-                            <TextInput
-                                keyboardType="default"
-                                placeholder="what do you have in mind?"
-                                multiline={true}
-                                style={styles.input}
-                                value={values.body}
-                                onChangeText={handleChange("body")}
-                                onBlur={handleBlur("body")} />
+                            <TextInput 
+                            keyboardType="default"
+                            placeholder="what do you have in mind?"
+                            multiline={true}
+                            style={styles.input}
+                            value={values.body}
+                            onChangeText={handleChange("body")}
+                            onBlur={handleBlur("body")}/>
                             {errors.body && touched.body && <Text style={styles.errorText}>{errors.body}</Text>}
                         </View>
-                        <View style={styles.inputBlock}>
-                            <TextInput
-                                keyboardType="default"
-                                placeholder="image link"
-                                style={styles.input}
-                                value={values.image}
-                                onChangeText={handleChange("image")}
-                                onBlur={handleBlur("image")} />
+                         <View style={styles.inputBlock}>
+                            <TextInput 
+                            keyboardType="default"
+                            placeholder="image link"
+                            style={styles.input}
+                            value={values.image}
+                            onChangeText={handleChange("image")}
+                            onBlur={handleBlur("image")}/>
                             {errors.image && touched.image && <Text style={styles.errorText}>{errors.image}</Text>}
                         </View>
 
-                        <Pressable
-                            onPress={handleSubmit}
-                            style={styles.submit}>
-                                {activity ?
-                                <ActivityIndicator size={24} color="white"/>
-                                :
-                            <Text style={{ fontWeight: "bold", color: "oldlace" }}>POST DISCUSSION</Text>}
+                        <Pressable 
+                        onPress={handleSubmit}
+                        style={styles.submit}>
+                            {activity ?
+                            <ActivityIndicator size={24} color="white" />
+                            :
+                            <Text style={{ fontWeight: "bold",color: "oldlace" }}>POST DISCUSSION</Text>}
                         </Pressable>
                     </View>
                 </View>
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     wrapper: {
         flex: 1,
         paddingTop: StatusBar.currentHeight,
-    },
+    }, 
     ScrollViewContainer: {
         flexGrow: 1,
         justifyContent: "space-between",
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingBottom: 40,
         paddingHorizontal: 12
-    },
+    }, 
     form: {
         display: "flex",
         gap: 12
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
         borderColor: "brown",
         borderRadius: 4
     },
-    submit: {
+    submit: { 
         height: 56,
         backgroundColor: "brown",
         borderRadius: 6,

@@ -9,7 +9,6 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import DiscussionPostCard from "../../components/DiscussionPostCard";
 import { db } from "../../config/firebase";
 
-
 SplashScreen.preventAutoHideAsync();
 
 export default function Discussion () {
@@ -23,7 +22,7 @@ export default function Discussion () {
         if (loaded || error) {
             SplashScreen.hideAsync();
         }
-    },[loaded,error])
+    },[loaded,error]);
 
     if (!loaded && !error) {
         return null;
@@ -54,16 +53,16 @@ export default function Discussion () {
                         <FontAwesome name="pencil-square-o" size={32} color="brown" />
                     </Link>
                 </View>
-                
+
                 <View>
-                    <FlatList
+                    <FlatList 
                     data={data}
                     renderItem={({item}) => {
-                       return <DiscussionPostCard postData={item}/> 
+                        return <DiscussionPostCard postData={item}/>
                     }}
                     keyExtractor={(item) => item.id}
                     ItemSeparatorComponent={() => (
-                        <View style={{height: 16}}></View>
+                        <View style={{height: 32}}></View>
                     )}/>
                 </View>
             </SafeAreaView>
@@ -74,20 +73,20 @@ export default function Discussion () {
 const styles = StyleSheet.create({
     wrapper: {
         flex: 1,
-        paddingHorizontal: 12
-    },  
-    header: {
+        paddingHorizontal: 12,
+        paddingBottom: 60
+    },
+    header :{
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "flex-end",
-        marginBottom: 16
+        marginBottom: 16,
     },
     brandText: {
         fontFamily: "monradok",
         fontSize: 36,
         color: "black",
         fontWeight: "semibold"
-        
     }
-})
+});
