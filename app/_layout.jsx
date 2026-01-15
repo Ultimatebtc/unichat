@@ -17,7 +17,6 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Protected guard={session}>
           <Stack.Screen
             name="(tabs)"
             options={{
@@ -30,9 +29,7 @@ export default function RootLayout() {
               title: "Create discussion",
               headerShown: true
             }} />
-        </Stack.Protected>
 
-        <Stack.Protected guard={!session}>
           <Stack.Screen
             name="index"
             options={{
@@ -45,7 +42,6 @@ export default function RootLayout() {
               title: "Sign in",
               headerShown: false
             }} />
-        </Stack.Protected>
       </Stack>
     </AuthProvider>
   );

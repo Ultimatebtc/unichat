@@ -10,7 +10,8 @@ import { useRouter } from "expo-router";
 
 const validationRules = yup.object().shape({
     subject: yup.string().required().min(3),
-    body: yup.string().required().min(1)
+    body: yup.string().required().min(1),
+    image: yup.string().required(),
 });
 
 export default function CreateDiscussion() {
@@ -20,7 +21,7 @@ export default function CreateDiscussion() {
     const router = useRouter();
 
     const { handleChange, handleBlur, errors, values, touched, handleSubmit } = useFormik({
-        initialValues: { subject: "", body: "" },
+        initialValues: { subject: "", body: "", image:"" },
         onSubmit: async () => {
             setActivity(true);
 
@@ -30,6 +31,7 @@ export default function CreateDiscussion() {
                     text: values.body,
                     category: selectedCategory,
                     author: "",
+                    imgUrl: values.image,
                     timecreated: new Date().getTime(),
                 });
 
@@ -93,6 +95,16 @@ export default function CreateDiscussion() {
                                 onChangeText={handleChange("body")}
                                 onBlur={handleBlur("body")} />
                             {errors.body && touched.body && <Text style={styles.errorText}>{errors.body}</Text>}
+                        </View>
+                        <View style={styles.inputBlock}>
+                            <TextInput
+                                keyboardType="default"
+                                placeholder="image link"
+                                style={styles.input}
+                                value={values.image}
+                                onChangeText={handleChange("image")}
+                                onBlur={handleBlur("image")} />
+                            {errors.image && touched.image && <Text style={styles.errorText}>{errors.image}</Text>}
                         </View>
 
                         <Pressable
