@@ -3,9 +3,10 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { useFormik } from 'formik';
 import { useState, useEffect } from "react";
-import { Alert, Dimensions, FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Dimensions, FlatList, Image, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { db } from '../config/firebase';
 import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
+import { timeAgo } from '../utils/time-ago';
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -94,13 +95,33 @@ export default function DiscussionPostCard({ postData }) {
                 </View>
             </View>
 
-            {/* post comments */}
+            {/* posted comments */}
             {showComments &&
                 <View>
                     <FlatList
                         data={comments}
                         renderItem={({ item }) => {
-                            return <Text style={{ fontSize: 11, color: "gray" }}>{item.data.comment}</Text>
+                            return (
+                                <View>
+                                    <View style={{ flexDirection: "row", alignItems: "center", gap: 16}}>
+                                        <Pressable style={{ flexDirection: "row", alignItems: "center", gap: 4}}>
+                                            <Image
+                                                style={{
+                                                    width: 24,
+                                                    height: 24,
+                                                    resizeMode: "cover",
+                                                    borderRadius: 50,
+                                                }}
+                                                source={{ uri: "https://pixabay.com/get/g425c25c9eb35f677229741cfd0b16ff93dbf30edcd5ba3e18bb929ef9c3c6c2dcc424681397d019a439c7c863a870c427823fe38d0b44da6fd1125263a1417d596dac03e9cb254233fefb40063dc5c7f_640.jpg" }}
+                                                alt="user photo"
+                                            />
+                                            <Text style={{ fontSize: 11, color: "black",fontWeight: "600" }}>John Wick</Text>
+                                        </Pressable>
+                                        <Text style={{ fontSize: 11, color: "gray" }}>{timeAgo(item.data.timecreated)}</Text>
+                                    </View>
+                                    <Text style={{ fontSize: 11, color: "black" }}>{item.data.comment}</Text>
+                                </View>
+                            )
                         }}
                         keyExtractor={(item) => item.id}
                         ItemSeparatorComponent={() => (
